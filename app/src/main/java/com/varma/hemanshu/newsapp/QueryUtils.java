@@ -47,6 +47,8 @@ public final class QueryUtils {
 
         try {
             //Path for getting data (Object)Root->(Object)Response->(Array)Results->(Object)index-> Fetch required data
+            // above path plus -> (Object)Fields for getting Author Name
+
             //JSONObject for Root
             JSONObject root = new JSONObject(jsonString);
 
@@ -59,13 +61,17 @@ public final class QueryUtils {
                 //JSONObject for items at i
                 JSONObject index = result.getJSONObject(i);
 
+                //JSONObject for Author Name stored in fields
+                JSONObject fields = index.getJSONObject("fields");
+
                 //Fetch the required data from JSON
                 String titleFromJson = index.optString("webTitle");
+                String authorFromJson = fields.optString("byline");
                 String urlFromJson = index.optString("webUrl");
                 String categoryFromJson = index.optString("sectionName");
                 String dateFromJson = index.optString("webPublicationDate");
 
-                News news = new News(titleFromJson, urlFromJson, categoryFromJson, dateFromJson);
+                News news = new News(titleFromJson, authorFromJson, urlFromJson, categoryFromJson, dateFromJson);
                 newsArrayList.add(news);
             }
         } catch (JSONException e) {

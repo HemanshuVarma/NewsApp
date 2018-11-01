@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     TextView mEmptyTextView;
 
     private String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String REQUEST_URL = "https://content.guardianapis.com/search?format=json&page-size=10&api-key=55cad110-56bb-418b-92d5-49dbf9cfad2b";
+    private static final int NEWS_LOADER_ID = 1;
+    private static final String REQUEST_URL = "https://content.guardianapis.com/search?format=json&page-size=20&show-fields=byline&api-key=55cad110-56bb-418b-92d5-49dbf9cfad2b";
 
     private NewsAdapter mAdapter;
 
@@ -41,15 +42,14 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         ListView list = findViewById(R.id.list);
-
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
-
         list.setAdapter(mAdapter);
 
         Log.i(LOG_TAG, "Invoked onCreate");
         LoaderManager loaderManager = getLoaderManager();
         if (isConnected) {
-            loaderManager.initLoader(1, null, this);
+            Log.i(LOG_TAG, "Loader Manager Initiated");
+            loaderManager.initLoader(NEWS_LOADER_ID, null, this);
         } else {
             mEmptyTextView.setText(R.string.no_internet);
             mProgressbar.setVisibility(View.GONE);
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
-    public void onLoadFinished(Loader<List<News>> loader, List<News> data) {
+    public void onLoadFinished(Loader<List<News>> loader, List<News> newsData) {
         Log.i(LOG_TAG, "Invoked onLoadFinished");
         mProgressbar.setVisibility(View.GONE);
 
@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         // Clear the adapter of previous earthquake data
         mAdapter.clear();
-        if (data != null && data.isEmpty()) {
-            mAdapter.addAll(data);
+        if (newsData != null && !newsData.isEmpty()) {
+            mAdapter.addAll(newsData);
             mEmptyTextView.setVisibility(View.GONE);
         }
     }

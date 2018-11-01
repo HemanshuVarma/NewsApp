@@ -8,12 +8,12 @@ import java.util.List;
 
 public class NewsLoader extends AsyncTaskLoader<List<News>> {
 
-    private String LOG_TAG = NewsLoader.class.getSimpleName();
-    private String url;
+    private static final String LOG_TAG = NewsLoader.class.getName();
+    private String mUrl;
 
     public NewsLoader(Context context, String stringUrl) {
         super(context);
-        url = stringUrl;
+        mUrl = stringUrl;
     }
 
     @Override
@@ -25,10 +25,10 @@ public class NewsLoader extends AsyncTaskLoader<List<News>> {
     @Override
     public List<News> loadInBackground() {
         Log.i(LOG_TAG,"Invoked loadInBackground");
-        if (url == null) {
+        if (mUrl == null) {
             return null;
         }
-        List<News> myListNews = QueryUtils.newsData(url);
+        List<News> myListNews = QueryUtils.newsData(mUrl);
         return myListNews;
     }
 }

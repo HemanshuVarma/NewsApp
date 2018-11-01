@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">News App</string>
     <string name="category">Category :</string>
-    <string name="no_internet">No Internet</string>
+    <string name="author">Author :</string>
+    <string name="no_internet">No Active Internet</string>
     <string name="no_news">No News</string>
 </resources>

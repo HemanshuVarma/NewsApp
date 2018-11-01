@@ -17,6 +17,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
     static class ViewHolder {
         private TextView title;
+        private TextView author;
         private TextView category;
         private TextView date;
     }
@@ -28,9 +29,10 @@ public class NewsAdapter extends ArrayAdapter<News> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_list_items, parent, false);
 
             holder = new ViewHolder();
-            holder.title = (TextView) convertView.findViewById(R.id.title_tv);
-            holder.category = (TextView) convertView.findViewById(R.id.category_tv);
-            holder.date = (TextView) convertView.findViewById(R.id.date_tv);
+            holder.title = convertView.findViewById(R.id.title_tv);
+            holder.author = convertView.findViewById(R.id.author_tv);
+            holder.category = convertView.findViewById(R.id.category_tv);
+            holder.date = convertView.findViewById(R.id.date_tv);
 
             convertView.setTag(holder);
         } else {
@@ -40,8 +42,13 @@ public class NewsAdapter extends ArrayAdapter<News> {
         News currentData = getItem(position);
 
         holder.title.setText(currentData.getTitle());
+        holder.author.setText(currentData.getAuthor());
         holder.category.setText(currentData.getCategory());
-        holder.date.setText(currentData.getTimestamp());
+
+        String dateTimeStamp = currentData.getTimestamp();
+        String[] dateString = dateTimeStamp.split("T");
+        holder.date.setText(dateString[0]);
         return convertView;
     }
+
 }
