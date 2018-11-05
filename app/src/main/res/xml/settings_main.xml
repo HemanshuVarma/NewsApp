@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings_label">
+
+    <EditTextPreference
+        android:defaultValue="@string/settings_query_value"
+        android:inputType="text"
+        android:key="@string/settings_query_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/settings_query_label" />
+
+    <EditTextPreference
+        android:defaultValue="@string/settings_page_feed_value"
+        android:inputType="numberDecimal"
+        android:key="@string/settings_page_feed_key"
+        android:selectAllOnFocus="true"
+        android:title="@string/settings_page_feed_label" />
+
+</PreferenceScreen>

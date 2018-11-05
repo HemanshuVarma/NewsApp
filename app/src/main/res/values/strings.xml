@@ -4,4 +4,12 @@
     <string name="author">Author :</string>
     <string name="no_internet">No Active Internet</string>
     <string name="no_news">No News</string>
+    <string name="settings_label">Settings</string>
+    <string name="api_key">55cad110-56bb-418b-92d5-49dbf9cfad2b</string>
+    <string name="settings_page_feed_label">Feed size</string>
+    <string name="settings_page_feed_key" translatable="false">max_feed</string>
+    <string name="settings_page_feed_value" translatable="false">0</string>
+    <string name="settings_query_label">Search by keyword</string>
+    <string name="settings_query_key" translatable="false">feed_query</string>
+    <string name="settings_query_value" translatable="false">null</string>
 </resources>

@@ -4,12 +4,16 @@ import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     private String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int NEWS_LOADER_ID = 1;
-    private static final String REQUEST_URL = "https://content.guardianapis.com/search?format=json&page-size=20&show-fields=byline&api-key=55cad110-56bb-418b-92d5-49dbf9cfad2b";
+    private static final String NEWS_BASE_URL = "https://content.guardianapis.com/search";
 
     private NewsAdapter mAdapter;
 
@@ -72,7 +76,22 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     @Override
     public Loader<List<News>> onCreateLoader(int id, Bundle args) {
         Log.i(LOG_TAG, "Invoked onCreateLoader");
-        return new NewsLoader(this, REQUEST_URL);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String queryString = sharedPref.getString(getString(R.string.settings_query_key),
+                getString(R.string.settings_query_value));
+        String pageFeedSize = sharedPref.getString(getString(R.string.settings_page_feed_key),
+                getString(R.string.settings_page_feed_value));
+
+        Uri baseUrl = Uri.parse(NEWS_BASE_URL);
+        Uri.Builder urlBuilder = baseUrl.buildUpon();
+        urlBuilder.appendQueryParameter("q", queryString);
+        urlBuilder.appendQueryParameter("format", "json");
+        urlBuilder.appendQueryParameter("page-size", pageFeedSize);
+        urlBuilder.appendQueryParameter("show-fields", "byline");
+        urlBuilder.appendQueryParameter("api-key", getString(R.string.api_key));
+        return new NewsLoader(this, urlBuilder.toString());
     }
 
     @Override
@@ -95,5 +114,22 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     public void onLoaderReset(Loader<List<News>> loader) {
         Log.i(LOG_TAG, "Invoked onLoaderReset");
         mAdapter.clear();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.settings_action) {
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
